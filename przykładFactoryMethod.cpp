@@ -5,7 +5,7 @@ class NinjaTool {
   virtual ~NinjaTool() {}
   virtual std::string Atack() const = 0;
   void repair() {}
-  void dropWepon() {}
+  void clearWeapon() {}
 };
 
 class Katana : public NinjaTool {
@@ -49,27 +49,37 @@ class CreateKunai : public CreatorNinjaTools {
   }
 };
 
-void ClientCode(const CreatorNinjaTools& tool) {
+void ClientCode(int lengthToTarget) {
+  CreatorNinjaTools* tool;
+
+  if(lengthToTarget < 50){
+    tool = new CreateKatana();
+  }
+  if(lengthToTarget >= 50){
+    tool = new CreateKunai();
+  }
+
   std::cout << "Ninja is tracking her target and "
-            << tool.ShowWepon() << std::endl;
+            << tool -> ShowWepon() << std::endl;
+  
+  delete tool;
 }
 
 
 int main() {
-  std::cout << std::endl;
-
-  std::cout << "Ninja takes out the katana\n";
-  CreatorNinjaTools* katana = new CreateKatana();
-  ClientCode(*katana);
+  int lengthToTarget;
 
   std::cout << std::endl;
 
-  std::cout << "Ninja takes out the kunai\n";
-  CreatorNinjaTools* kunai = new CreateKunai();
-  ClientCode(*kunai);
-
+  std::cout << "Ninja sees a close target. ";
+  lengthToTarget = 10;
+  ClientCode(lengthToTarget);
+  
   std::cout << std::endl;
 
-  delete katana;
-  delete kunai;
+  std::cout << "Ninja sees a distant target. ";
+  lengthToTarget = 100;
+  ClientCode(lengthToTarget);
+  
+  std::cout << std::endl;
 }
